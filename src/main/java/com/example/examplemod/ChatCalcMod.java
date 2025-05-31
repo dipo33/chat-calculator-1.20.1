@@ -23,7 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ChatCalcMod
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "DipoChatCalc";
+    public static final String MODID = "dipochatcalc";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
