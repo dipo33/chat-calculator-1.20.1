@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.dipo33.chatcalc;
 
 import org.slf4j.Logger;
 
