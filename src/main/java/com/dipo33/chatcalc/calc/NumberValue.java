@@ -31,6 +31,10 @@ public interface NumberValue {
 
     NumberValue fact();
 
+    NumberValue lcm(NumberValue b);
+
+    NumberValue gcd(NumberValue b);
+
     boolean isInteger();
 
     BigInteger asInteger();

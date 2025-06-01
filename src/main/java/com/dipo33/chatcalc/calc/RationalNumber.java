@@ -201,6 +201,28 @@ public class RationalNumber implements NumberValue {
     }
 
     @Override
+    public NumberValue lcm(final NumberValue bVal) {
+        if (!isInteger() || !bVal.isInteger()) {
+            throw new ArithmeticException("LCM can only be calculated for integers");
+        }
+
+        var a = this.asInteger();
+        var b = bVal.asInteger();
+        return new RationalNumber(RationalNumber.lcm(a, b), BigInteger.ONE);
+    }
+
+    @Override
+    public NumberValue gcd(final NumberValue bVal) {
+        if (!isInteger() || !bVal.isInteger()) {
+            throw new ArithmeticException("GCD can only be calculated for integers");
+        }
+
+        var a = this.asInteger();
+        var b = bVal.asInteger();
+        return new RationalNumber(RationalNumber.gcd(a, b), BigInteger.ONE);
+    }
+
+    @Override
     public BigDecimal asBigDecimal() {
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), 100, RoundingMode.HALF_UP);
     }

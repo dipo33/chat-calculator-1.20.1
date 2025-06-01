@@ -23,6 +23,8 @@ public class FormulaFunction implements IFormulaElement {
             case "ceil" -> new FormulaFunction(FunctionType.CEIL);
             case "round" -> new FormulaFunction(FunctionType.ROUND);
             case "fact" -> new FormulaFunction(FunctionType.FACTORIAL);
+            case "lcm" -> new FormulaFunction(FunctionType.LCM);
+            case "gcd" -> new FormulaFunction(FunctionType.GCD);
             default -> throw new IllegalArgumentException("Unknown function: " + fun);
         };
     }
@@ -49,6 +51,16 @@ public class FormulaFunction implements IFormulaElement {
                 yield a.round(precision);
             }
             case FACTORIAL -> stack.pop().fact();
+            case LCM -> {
+                NumberValue a = stack.pop();
+                NumberValue b = stack.pop();
+                yield a.lcm(b);
+            }
+            case GCD -> {
+                NumberValue a = stack.pop();
+                NumberValue b = stack.pop();
+                yield a.gcd(b);
+            }
         };
     }
 
@@ -65,6 +77,8 @@ public class FormulaFunction implements IFormulaElement {
         FLOOR,
         CEIL,
         ROUND,
-        FACTORIAL
+        FACTORIAL,
+        LCM,
+        GCD,
     }
 }

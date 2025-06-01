@@ -100,6 +100,24 @@ public class IrrationalNumber implements NumberValue {
     }
 
     @Override
+    public NumberValue lcm(final NumberValue b) {
+        if (!isInteger() || !b.isInteger()) {
+            throw new ArithmeticException("LCM can only be calculated for integers");
+        }
+
+        return asRational().lcm(b);
+    }
+
+    @Override
+    public NumberValue gcd(final NumberValue b) {
+        if (!isInteger() || !b.isInteger()) {
+            throw new ArithmeticException("GCD can only be calculated for integers");
+        }
+
+        return asRational().gcd(b);
+    }
+
+    @Override
     public boolean isInteger() {
         return this.value.stripTrailingZeros().scale() <= 0;
     }
