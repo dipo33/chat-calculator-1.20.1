@@ -4,7 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.dipo33.chatcalc.calc.NumberValue;
+import com.dipo33.chatcalc.calc.Parser;
 import com.dipo33.chatcalc.calc.RationalNumber;
+import com.dipo33.chatcalc.calc.ShuntingYard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -173,5 +175,16 @@ public class MathTests {
         RationalNumber rational = (RationalNumber) number;
         assertEquals(BigInteger.valueOf(256), rational.getNumerator());
         assertEquals(BigInteger.valueOf(1), rational.getDenominator());
+    }
+
+    @Test
+    @DisplayName("Round Function")
+    public void roundFunction() {
+        String formula = "round(-5.95,1)";
+        var parsed = Parser.parse(formula);
+
+        var expected = new RationalNumber(-6, 1);
+        var actual = ShuntingYard.evaluatePrefix(ShuntingYard.shuntingYard(parsed));
+        assertEquals(expected, actual);
     }
 }
