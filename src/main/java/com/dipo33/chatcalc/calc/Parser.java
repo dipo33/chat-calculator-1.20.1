@@ -29,7 +29,16 @@ public class Parser {
                 }
 
                 String number = formulaString.substring(begin, i + 1);
-                elements.add(new FormulaNumber(RationalNumber.fromString(number)));
+                RationalNumber rationalNumber = RationalNumber.fromString(number);
+                if (!elements.isEmpty()) {
+                    IFormulaElement last = elements.get(elements.size() - 1);
+                    if (last instanceof FormulaOperator operator && operator.getValue() == FormulaOperator.OperatorType.NEGATION) {
+                        rationalNumber = rationalNumber.multiply(new RationalNumber(-1));
+                        elements.remove(elements.size() - 1);
+                    }
+                }
+
+                elements.add(new FormulaNumber(rationalNumber));
             } else if (isFunction(c)) {
                 int begin = i;
                 while (i + 1 < formulaString.length() && isFunction(formulaString.charAt(i + 1))) {
