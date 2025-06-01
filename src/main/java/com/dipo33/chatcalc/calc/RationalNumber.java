@@ -172,7 +172,9 @@ public class RationalNumber implements NumberValue {
     @Override
     public NumberValue round(final NumberValue precisionValue) {
         if (!precisionValue.isInteger()) {
-            throw new ArithmeticException("Rounding with non-integer precision is not supported");
+            throw new ArithmeticException("Rounding with non-integer is not supported");
+        } else if (precisionValue.asBigDecimal().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ArithmeticException("Rounding with negative precision is not supported");
         }
 
         var precision = precisionValue.asInteger().intValueExact();

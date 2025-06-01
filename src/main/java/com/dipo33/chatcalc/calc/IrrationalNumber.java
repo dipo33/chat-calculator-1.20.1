@@ -81,6 +81,8 @@ public class IrrationalNumber implements NumberValue {
     public NumberValue round(final NumberValue precision) {
         if (!precision.isInteger()) {
             throw new ArithmeticException("Rounding with non-integer precision is not supported");
+        } else if (precision.asBigDecimal().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ArithmeticException("Rounding with negative precision is not supported");
         }
         return new RationalNumber(
             value.setScale(precision.asInteger().intValueExact(), RoundingMode.HALF_UP).toBigInteger(),
