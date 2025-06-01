@@ -44,7 +44,7 @@ public class Parser {
                         elements.add(new FormulaOperator(FormulaOperator.OperatorType.ADDITION));
                         break;
                     case '-':
-                        if (i == 0 || formulaString.charAt(i - 1) == '(') {
+                        if (i == 0 || formulaString.charAt(i - 1) == '(' || formulaString.charAt(i - 1) == ',') {
                             elements.add(new FormulaOperator(FormulaOperator.OperatorType.NEGATION));
                         } else {
                             elements.add(new FormulaOperator(FormulaOperator.OperatorType.SUBTRACTION));
