@@ -98,6 +98,9 @@ public class ShuntingYard {
             }
         }
 
+        if (stack.size() != 1) {
+            throw new RuntimeException("Invalid formula");
+        }
         lastResult = stack.pop();
         if (lastResult.isInteger()) {
             lastResult = new RationalNumber(lastResult.asInteger(), BigInteger.ONE);
