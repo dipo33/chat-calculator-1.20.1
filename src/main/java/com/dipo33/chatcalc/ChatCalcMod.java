@@ -2,10 +2,12 @@ package com.dipo33.chatcalc;
 
 import org.slf4j.Logger;
 
+import com.dipo33.chatcalc.command.Commands;
 import com.mojang.logging.LogUtils;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,12 +33,19 @@ public class ChatCalcMod {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+    }
+
+    private void registerCommands(final RegisterCommandsEvent event)
+    {
+        LOGGER.info("Registering ChatCalc Commands");
+        Commands.registerCommands(event.getDispatcher(), event.getBuildContext());
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
