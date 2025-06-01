@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'com.github.johnrengelman.shadow' version '7.1.2' // Add this line
 }
 
 version = mod_version
@@ -128,6 +129,11 @@ repositories {
     }
 }
 
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 dependencies {
     // Specify the version of Minecraft to use.
     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
@@ -152,7 +158,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 
-    implementation("ch.obermuhlner:big-math:2.3.2")
+    shade ("ch.obermuhlner:big-math:2.3.2")
+    minecraftLibrary("ch.obermuhlner:big-math:2.3.2")
 
     runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106")
 
@@ -177,24 +184,6 @@ tasks.named('processResources', ProcessResources).configure {
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
-}
-
-// Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title'     : mod_id,
-                'Specification-Vendor'    : mod_authors,
-                'Specification-Version'   : '1', // We are version 1 of ourselves
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : mod_authors,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
@@ -222,4 +211,32 @@ tasks.withType(JavaCompile).configureEach {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    archiveClassifier = 'slim'
+    manifest {
+        attributes([
+            'Specification-Title'     : mod_id,
+            'Specification-Vendor'    : mod_authors,
+            'Specification-Version'   : '1', // We are version 1 of ourselves
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : project.jar.archiveVersion,
+            'Implementation-Vendor'   : mod_authors,
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    relocate 'ch.obermuhlner.math', "${project.group}.relocated.math"
+    finalizedBy 'reobfShadowJar'
+}
+
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
 }
