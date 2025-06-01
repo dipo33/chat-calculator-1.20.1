@@ -87,8 +87,7 @@ public class ParserTests {
     @DisplayName("Parse complex formula")
     public void parseComplexFormula() {
         List<IFormulaElement> expected = Arrays.asList(
-                new FormulaOperator(FormulaOperator.OperatorType.NEGATION),
-                new FormulaNumber(new RationalNumber(7)),
+                new FormulaNumber(new RationalNumber(-7)),
                 new FormulaOperator(FormulaOperator.OperatorType.POWER),
                 new FormulaNumber(new RationalNumber(4)),
                 new FormulaOperator(FormulaOperator.OperatorType.MULTIPLICATION),
